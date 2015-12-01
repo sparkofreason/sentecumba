@@ -26,9 +26,3 @@
 
 (js/setTimeout #(chsk-send! [:doink/flibbit {:stuff "Shiz"}]) 500)
 (js/setTimeout #(chsk-send! [:doink/flibbit {:stuff "Snarf"}]) 1000)
-
-#_(let [s (js/WebSocket. "ws://localhost:5050/ws")]
-  (js/setTimeout #(.send s "Feeb") 500))
-
-#_(go
-  (println (<! (http/get "/ajax"))))

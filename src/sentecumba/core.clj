@@ -44,7 +44,7 @@
   (reify Handler
     (^void handle [_ ^Context ctx]
       (let [promise (hp/blocking
-                      (let [request (assoc (kp/keyword-params-request (p/params-request (hs/build-ring-request (.getRequest ctx)))) :catacumba/context (basic-context ctx))]
+                      (let [request (assoc (kp/keyword-params-request (p/params-request (hs/build-ring-request (.getRequest ctx)))) :catacumba/context ctx)]
                         (handler request)))]
         (hp/then promise (fn [response]
                            (when (satisfies? hs/IHandlerResponse response)
@@ -72,16 +72,17 @@
   (open? [ch] (println "open?" (.isOpen web-socket)) (.isOpen web-socket))
   (close! [ch] (println "close!") (.close web-socket))
   (send!* [ch msg close-after-send?]
-    (println msg)
+    (println close-after-send? msg)
     (let [r (.send web-socket msg)]
-      #_(when (boolean close-after-send?) (.close web-socket))
+      (println "SENT")
+      #_(when close-after-send? (.close web-socket))
       true)))
 
 (defn websocket
   [context callback-map]
   (try
     (let [wss (WebSocketSession. callback-map nil)]
-      (WebSockets/websocket ^Context (:catacumba/context context) wss)
+      (WebSockets/websocket ^Context context wss)
       wss)
     (catch Exception e
       (println e)
