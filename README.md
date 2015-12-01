@@ -1,6 +1,6 @@
 # sentecumba
 
-A Clojure library designed to ... well, that part is up to you.
+Experimental integration of catacumba server and sente messaging library.
 
 ## Usage
 
